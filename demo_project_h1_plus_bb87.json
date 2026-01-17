@@ -1,0 +1,736 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "name": "Demo H1 + Bahía ficticia 87B Barras"
+  },
+  "project": {
+    "bays": [
+      {
+        "bay_id": "BAY-H1",
+        "name": "H1"
+      },
+      {
+        "bay_id": "BAY-BB87",
+        "name": "Barras (87B) - Ficticia"
+      },
+      {
+        "bay_id": "BAY-001",
+        "name": "H2"
+      }
+    ],
+    "signals": [
+      {
+        "signal_id": "SIG_H1_TRIP_52_IED2",
+        "name": "Trip 52 (IED2)",
+        "nature": "DIGITAL",
+        "description": "Orden de disparo desde IED2 a CB1"
+      },
+      {
+        "signal_id": "SIG_BB87_TRIP_TO_CB1",
+        "name": "87B Trip Barras → CB1",
+        "nature": "DIGITAL",
+        "description": "Trip 87B desde IED Barras hacia Interruptor 52 (CB1)"
+      },
+      {
+        "signal_id": "SIG_H1_DS1_CLOSED_ST",
+        "name": "DS1 Cerrado",
+        "nature": "DIGITAL",
+        "description": "Estado DS1 cerrado hacia IED1"
+      },
+      {
+        "signal_id": "SIG_H1_DS2_CLOSED_ST",
+        "name": "DS2 Cerrado",
+        "nature": "DIGITAL",
+        "description": "Estado DS2 cerrado hacia IED1"
+      },
+      {
+        "signal_id": "SIG_H1_DS2_OPEN_ST",
+        "name": "DS2 Abierto",
+        "nature": "DIGITAL",
+        "description": "Estado DS2 abierto hacia IED1"
+      },
+      {
+        "signal_id": "SIG_H1_TP_DTT_IED2_TO_IED1",
+        "name": "TP DTT IED2→IED1",
+        "nature": "DIGITAL",
+        "description": "Teleprotección DTT (demo interna)"
+      },
+      {
+        "signal_id": "SIG_H1_52A_STATUS",
+        "name": "Estado 52a",
+        "nature": "DIGITAL",
+        "description": "Indicación 52a desde CB1 a IEDs"
+      },
+      {
+        "signal_id": "SIG_CB1_STATUS_TO_BB87",
+        "name": "Estado CB1 hacia 87B",
+        "nature": "DIGITAL",
+        "description": "Estados del interruptor CB1 usados por la protección de barras"
+      },
+      {
+        "signal_id": "SIG_H1_DS1_OPEN_ST",
+        "name": "DS1 Abierto",
+        "nature": "DIGITAL",
+        "description": "Estado DS1 abierto hacia IED1"
+      },
+      {
+        "signal_id": "SIG_H1_DS2_OPEN",
+        "name": "Abrir DS2",
+        "nature": "DIGITAL",
+        "description": "Mando abrir DS2 desde IED1"
+      },
+      {
+        "signal_id": "SIG_H1_TP_DTT_IED1_TO_IED2",
+        "name": "TP DTT IED1→IED2",
+        "nature": "DIGITAL",
+        "description": "Teleprotección DTT (demo interna)"
+      },
+      {
+        "signal_id": "SIG_H1_DS1_OPEN",
+        "name": "Abrir DS1",
+        "nature": "DIGITAL",
+        "description": "Mando abrir DS1 desde IED1"
+      },
+      {
+        "signal_id": "SIG_H1_TP_POTT_IED2_TO_IED1",
+        "name": "TP POTT Permisivo IED2→IED1",
+        "nature": "DIGITAL",
+        "description": "Teleprotección permisivo POTT (demo interna)"
+      },
+      {
+        "signal_id": "SIG_H1_TRIP_52_IED1",
+        "name": "Trip 52 (IED1)",
+        "nature": "DIGITAL",
+        "description": "Orden de disparo desde IED1 a CB1"
+      },
+      {
+        "signal_id": "SIG_H1_DS2_CLOSE",
+        "name": "Cerrar DS2",
+        "nature": "DIGITAL",
+        "description": "Mando cerrar DS2 desde IED1"
+      },
+      {
+        "signal_id": "SIG_H1_52B_STATUS",
+        "name": "Estado 52b",
+        "nature": "DIGITAL",
+        "description": "Indicación 52b desde CB1 a IEDs"
+      },
+      {
+        "signal_id": "SIG_H1_TP_POTT_IED1_TO_IED2",
+        "name": "TP POTT Permisivo IED1→IED2",
+        "nature": "DIGITAL",
+        "description": "Teleprotección permisivo POTT (demo interna)"
+      },
+      {
+        "signal_id": "SIG_H1_CLOSE_52",
+        "name": "Close 52",
+        "nature": "DIGITAL",
+        "description": "Orden de cierre desde IED1 a CB1"
+      },
+      {
+        "signal_id": "SIG_H1_DS1_CLOSE",
+        "name": "Cerrar DS1",
+        "nature": "DIGITAL",
+        "description": "Mando cerrar DS1 desde IED1"
+      },
+      {
+        "signal_id": "SIG-020",
+        "name": "Trip",
+        "nature": "DIGITAL",
+        "description": ""
+      },
+      {
+        "signal_id": "SIG-021",
+        "name": "Bloqueo Cierre",
+        "nature": "DIGITAL",
+        "description": ""
+      },
+      {
+        "signal_id": "SIG_BB87_ALARM",
+        "name": "87B Alarma / Bloqueo",
+        "nature": "DIGITAL",
+        "description": "Alarma 87B (ej. disparo bloqueado / falla TC)"
+      }
+    ],
+    "devices": [
+      {
+        "device_id": "DEV-H1-IED1",
+        "bay_id": "BAY-H1",
+        "name": "PS1-H1",
+        "type": "IED",
+        "inputs": [
+          {
+            "signal_id": "SIG_H1_52A_STATUS",
+            "text": "Estado 52a desde Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_52B_STATUS",
+            "text": "Estado 52b desde Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_POTT_IED2_TO_IED1",
+            "text": "TP POTT - Recibir permisivo (desde IED2)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_DTT_IED2_TO_IED1",
+            "text": "TP DTT - Recibir disparo (desde IED2)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS1_OPEN_ST",
+            "text": "DS1 Abierto",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS1_CLOSED_ST",
+            "text": "DS1 Cerrado",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS2_OPEN_ST",
+            "text": "DS2 Abierto",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS2_CLOSED_ST",
+            "text": "DS2 Cerrado",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ],
+        "outputs": [
+          {
+            "signal_id": "SIG_H1_TRIP_52_IED1",
+            "text": "Trip 52 hacia Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_CLOSE_52",
+            "text": "Close 52 hacia Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS1_OPEN",
+            "text": "Abrir DS1 hacia Desconectador Línea",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS1_CLOSE",
+            "text": "Cerrar DS1 hacia Desconectador Línea",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS2_OPEN",
+            "text": "Abrir DS2 hacia Desconectador Barra",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS2_CLOSE",
+            "text": "Cerrar DS2 hacia Desconectador Barra",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_POTT_IED1_TO_IED2",
+            "text": "TP POTT - Enviar permisivo (hacia IED2)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_DTT_IED1_TO_IED2",
+            "text": "TP DTT - Enviar disparo (hacia IED2)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG-020",
+            "text": "Trip hacia Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      },
+      {
+        "device_id": "DEV-H1-IED2",
+        "bay_id": "BAY-H1",
+        "name": "IED Protección Respaldo",
+        "type": "IED",
+        "inputs": [
+          {
+            "signal_id": "SIG_H1_52A_STATUS",
+            "text": "Estado 52a desde Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_52B_STATUS",
+            "text": "Estado 52b desde Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_POTT_IED1_TO_IED2",
+            "text": "TP POTT - Recibir permisivo (desde IED1)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_DTT_IED1_TO_IED2",
+            "text": "TP DTT - Recibir disparo (desde IED1)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ],
+        "outputs": [
+          {
+            "signal_id": "SIG_H1_TRIP_52_IED2",
+            "text": "Trip 52 (respaldo) hacia Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_POTT_IED2_TO_IED1",
+            "text": "TP POTT - Enviar permisivo (hacia IED1)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TP_DTT_IED2_TO_IED1",
+            "text": "TP DTT - Enviar disparo (hacia IED1)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      },
+      {
+        "device_id": "DEV-H1-CB1",
+        "bay_id": "BAY-H1",
+        "name": "Interruptor 52",
+        "type": "CB",
+        "inputs": [
+          {
+            "signal_id": "SIG_H1_TRIP_52_IED1",
+            "text": "Trip 52 desde IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_TRIP_52_IED2",
+            "text": "Trip 52 desde IED2",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_CLOSE_52",
+            "text": "Close 52 desde IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_BB87_TRIP_TO_CB1",
+            "text": "Trip 87B desde IED Barras",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG-020",
+            "text": "Trip desde PS1-H1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG-021",
+            "text": "Bloqueo Cierre desde 86BF",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ],
+        "outputs": [
+          {
+            "signal_id": "SIG_H1_52A_STATUS",
+            "text": "Estado 52a hacia IEDs",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_52B_STATUS",
+            "text": "Estado 52b hacia IEDs",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_CB1_STATUS_TO_BB87",
+            "text": "Estados CB1 hacia IED Barras (87B)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      },
+      {
+        "device_id": "DEV-H1-DS1",
+        "bay_id": "BAY-H1",
+        "name": "Desconectador Línea",
+        "type": "DS",
+        "inputs": [
+          {
+            "signal_id": "SIG_H1_DS1_OPEN",
+            "text": "Abrir desde IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS1_CLOSE",
+            "text": "Cerrar desde IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ],
+        "outputs": [
+          {
+            "signal_id": "SIG_H1_DS1_OPEN_ST",
+            "text": "Abierto hacia IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS1_CLOSED_ST",
+            "text": "Cerrado hacia IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      },
+      {
+        "device_id": "DEV-H1-DS2",
+        "bay_id": "BAY-H1",
+        "name": "Desconectador Barra",
+        "type": "DS",
+        "inputs": [
+          {
+            "signal_id": "SIG_H1_DS2_OPEN",
+            "text": "Abrir desde IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS2_CLOSE",
+            "text": "Cerrar desde IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ],
+        "outputs": [
+          {
+            "signal_id": "SIG_H1_DS2_OPEN_ST",
+            "text": "Abierto hacia IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_H1_DS2_CLOSED_ST",
+            "text": "Cerrado hacia IED1",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      },
+      {
+        "device_id": "DEV-BAY-H1-001",
+        "bay_id": "BAY-H1",
+        "name": "86BF",
+        "type": "IED",
+        "inputs": [],
+        "outputs": [
+          {
+            "signal_id": "SIG-021",
+            "text": "Bloqueo Cierre hacia Interruptor 52",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      },
+      {
+        "device_id": "DEV-BB87-IED",
+        "bay_id": "BAY-BB87",
+        "name": "IED Diferencial Barras (87B)",
+        "type": "IED",
+        "inputs": [
+          {
+            "signal_id": "SIG_CB1_STATUS_TO_BB87",
+            "text": "Estados CB1 (52a/52b) para lógica 87B",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ],
+        "outputs": [
+          {
+            "signal_id": "SIG_BB87_TRIP_TO_CB1",
+            "text": "Trip 87B hacia Interruptor 52 (CB1)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          },
+          {
+            "signal_id": "SIG_BB87_ALARM",
+            "text": "Alarma 87B (bloqueo / falla TC)",
+            "status": "CONFIRMED",
+            "test_block": false,
+            "interlocks": []
+          }
+        ]
+      }
+    ],
+    "canvases": [
+      {
+        "bay_id": "BAY-H1",
+        "zoom": 1.0,
+        "pan": {
+          "x": 0,
+          "y": 0
+        },
+        "device_positions": {
+          "DEV-H1-IED1": {
+            "x": 521.9682499999999,
+            "y": 108.06162499999999
+          },
+          "DEV-H1-CB1": {
+            "x": 511.7097500000001,
+            "y": 1259.3639999999996
+          },
+          "DEV-H1-IED2": {
+            "x": 524.156125,
+            "y": 514.5325
+          },
+          "DEV-H1-DS1": {
+            "x": 505.6262499999999,
+            "y": 1039.1452499999996
+          },
+          "DEV-H1-DS2": {
+            "x": 516.6605,
+            "y": 776.4310000000002
+          },
+          "DEV-BAY-H1-001": {
+            "x": 1471.0567499999995,
+            "y": 93.34243125000006
+          }
+        }
+      },
+      {
+        "bay_id": "BAY-BB87",
+        "zoom": 1.0,
+        "pan": {
+          "x": 0,
+          "y": 0
+        },
+        "device_positions": {
+          "DEV-BB87-IED": {
+            "x": 742.7125,
+            "y": 193.22499999999997
+          }
+        }
+      },
+      {
+        "bay_id": "BAY-001",
+        "zoom": 1.0,
+        "pan": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "device_positions": {}
+      }
+    ],
+    "templates": [
+      {
+        "code": "TRIP_52_IED1",
+        "label": "Trip 52 (IED1)",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden de disparo desde IED1 al interruptor 52"
+      },
+      {
+        "code": "TRIP_52_IED2",
+        "label": "Trip 52 (IED2)",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden de disparo desde IED2 al interruptor 52 (respaldo)"
+      },
+      {
+        "code": "CLOSE_52",
+        "label": "Close 52",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden de cierre al interruptor 52"
+      },
+      {
+        "code": "STATUS_52A",
+        "label": "Estado 52a",
+        "nature": "DIGITAL",
+        "category": "Estados",
+        "description": "Contacto auxiliar 52a (cerrado cuando el interruptor está cerrado)"
+      },
+      {
+        "code": "STATUS_52B",
+        "label": "Estado 52b",
+        "nature": "DIGITAL",
+        "category": "Estados",
+        "description": "Contacto auxiliar 52b (cerrado cuando el interruptor está abierto)"
+      },
+      {
+        "code": "DS1_OPEN",
+        "label": "Abrir DS1",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden abrir desconectador DS1 (Línea)"
+      },
+      {
+        "code": "DS1_CLOSE",
+        "label": "Cerrar DS1",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden cerrar desconectador DS1 (Línea)"
+      },
+      {
+        "code": "DS1_STATUS_OPEN",
+        "label": "DS1 Abierto",
+        "nature": "DIGITAL",
+        "category": "Estados",
+        "description": "Indicación DS1 abierto"
+      },
+      {
+        "code": "DS1_STATUS_CLOSED",
+        "label": "DS1 Cerrado",
+        "nature": "DIGITAL",
+        "category": "Estados",
+        "description": "Indicación DS1 cerrado"
+      },
+      {
+        "code": "DS2_OPEN",
+        "label": "Abrir DS2",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden abrir desconectador DS2 (Barra)"
+      },
+      {
+        "code": "DS2_CLOSE",
+        "label": "Cerrar DS2",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden cerrar desconectador DS2 (Barra)"
+      },
+      {
+        "code": "DS2_STATUS_OPEN",
+        "label": "DS2 Abierto",
+        "nature": "DIGITAL",
+        "category": "Estados",
+        "description": "Indicación DS2 abierto"
+      },
+      {
+        "code": "DS2_STATUS_CLOSED",
+        "label": "DS2 Cerrado",
+        "nature": "DIGITAL",
+        "category": "Estados",
+        "description": "Indicación DS2 cerrado"
+      },
+      {
+        "code": "TP_POTT_SEND",
+        "label": "Teleprotección POTT - Enviar Permisivo",
+        "nature": "DIGITAL",
+        "category": "Teleprotecciones",
+        "description": "Envío de permisivo POTT (ejemplo entre IEDs para demo)"
+      },
+      {
+        "code": "TP_POTT_RCV",
+        "label": "Teleprotección POTT - Recibir Permisivo",
+        "nature": "DIGITAL",
+        "category": "Teleprotecciones",
+        "description": "Recepción de permisivo POTT (ejemplo entre IEDs para demo)"
+      },
+      {
+        "code": "TP_DTT_SEND",
+        "label": "Teleprotección DTT - Enviar Disparo",
+        "nature": "DIGITAL",
+        "category": "Teleprotecciones",
+        "description": "Envío de DTT (Direct Transfer Trip) (ejemplo entre IEDs para demo)"
+      },
+      {
+        "code": "TP_DTT_RCV",
+        "label": "Teleprotección DTT - Recibir Disparo",
+        "nature": "DIGITAL",
+        "category": "Teleprotecciones",
+        "description": "Recepción de DTT (Direct Transfer Trip) (ejemplo entre IEDs para demo)"
+      },
+      {
+        "code": "BB87_TRIP",
+        "label": "87B Trip Barras",
+        "nature": "DIGITAL",
+        "category": "Protecciones",
+        "description": "Trip por diferencial de barras (87B) hacia interruptores"
+      },
+      {
+        "code": "BB87_ALM",
+        "label": "87B Alarma Barras",
+        "nature": "DIGITAL",
+        "category": "Alarmas",
+        "description": "Alarma / disparo bloqueado 87B"
+      }
+    ]
+  }
+}

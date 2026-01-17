@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "name": "Proyecto Nuevo"
+  },
+  "project": {
+    "bays": [],
+    "signals": [],
+    "devices": [],
+    "canvases": [],
+    "templates": [
+      {
+        "code": "50BF_ET1",
+        "label": "Arranque 50BF",
+        "nature": "DIGITAL",
+        "category": "Protecciones",
+        "description": "Arranque de falla de interruptor (50BF)"
+      },
+      {
+        "code": "TRIP_52",
+        "label": "Trip",
+        "nature": "DIGITAL",
+        "category": "Protecciones",
+        "description": "Orden de disparo a interruptor 52"
+      },
+      {
+        "code": "CLOSE",
+        "label": "Mando Cierre",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden de cierre a interruptor 52"
+      },
+      {
+        "code": "VOLT_BUS_AI",
+        "label": "Tensión barra",
+        "nature": "ANALOG",
+        "category": "Mediciones",
+        "description": "Medición analógica de tensión de barra"
+      },
+      {
+        "code": "ALM_DC_LOW",
+        "label": "Alarma DC bajo",
+        "nature": "DIGITAL",
+        "category": "Alarmas",
+        "description": "Alarma por bajo voltaje DC"
+      },
+      {
+        "code": "50BF_ET2",
+        "label": "Trip 50BF",
+        "nature": "DIGITAL",
+        "category": "Protecciones",
+        "description": ""
+      },
+      {
+        "code": "RETRIP_52",
+        "label": "Retrip",
+        "nature": "DIGITAL",
+        "category": "Protecciones",
+        "description": ""
+      },
+      {
+        "code": "VOLT_LINE_AI",
+        "label": "Tensión Línea",
+        "nature": "ANALOG",
+        "category": "Mediciones",
+        "description": ""
+      },
+      {
+        "code": "OPEN",
+        "label": "Mando Apertura",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": ""
+      }
+    ]
+  }
+}

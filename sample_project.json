@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "name": "SE Central 220kV (Demo)"
+  },
+  "project": {
+    "templates": [
+      {
+        "code": "50BF_START",
+        "label": "Arranque 50BF",
+        "nature": "DIGITAL",
+        "category": "Protecciones",
+        "description": "Arranque de falla de interruptor (50BF)"
+      },
+      {
+        "code": "TRIP_52",
+        "label": "Trip 52",
+        "nature": "DIGITAL",
+        "category": "Mandos",
+        "description": "Orden de disparo a interruptor 52"
+      },
+      {
+        "code": "VOLT_BUS_AI",
+        "label": "Tensión barra",
+        "nature": "ANALOG",
+        "category": "Mediciones",
+        "description": "Medición analógica de tensión de barra"
+      }
+    ],
+    "bays": [
+      {
+        "bay_id": "BAY-H1",
+        "name": "H1"
+      }
+    ],
+    "signals": [],
+    "devices": [
+      {
+        "device_id": "DEV-H1-PROT-S1",
+        "bay_id": "BAY-H1",
+        "name": "PROT_S1",
+        "type": "IED",
+        "inputs": [],
+        "outputs": []
+      }
+    ],
+    "canvases": [
+      {
+        "bay_id": "BAY-H1",
+        "zoom": 1.0,
+        "pan": {
+          "x": 0,
+          "y": 0
+        },
+        "device_positions": {
+          "DEV-H1-PROT-S1": {
+            "x": 200,
+            "y": 160
+          }
+        }
+      }
+    ]
+  }
+}
