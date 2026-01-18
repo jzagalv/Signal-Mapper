@@ -64,10 +64,17 @@
       "description": ""
     },
     {
-      "code": "BLK_86BF",
+      "code": "BLK_86",
       "label": "Bloqueo Cierre",
       "nature": "DIGITAL",
-      "category": "Bloqueoe",
+      "category": "Bloqueos",
+      "description": ""
+    },
+    {
+      "code": "CURRENT_AI",
+      "label": "Corrientes",
+      "nature": "DIGITAL",
+      "category": "Mediciones",
       "description": ""
     }
   ]
