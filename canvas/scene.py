@@ -5,6 +5,7 @@ from PyQt5.QtGui import QImage, QPainter
 
 from canvas.items.device_item import DeviceItem
 from canvas.items.signal_chip_item import SignalChipItem
+from canvas.items.test_block import should_show_test_block
 from domain.services.pending_service import count_pending_for_device
 
 class CanvasScene(QGraphicsScene):
@@ -27,6 +28,11 @@ class CanvasScene(QGraphicsScene):
         self.device_items.clear()
 
         bay = self.project.bays[self.bay_id]
+        out_test_block = {}
+        for dev in bay.devices.values():
+            for e in dev.outputs:
+                if bool(getattr(e, "test_block", False)):
+                    out_test_block[e.signal_id] = True
         layout = self.project.canvases.get(self.bay_id)
 
         x, y = 160, 140
@@ -62,6 +68,8 @@ class CanvasScene(QGraphicsScene):
                     direction="IN",
                     tooltip=tooltip,
                     interlocks=itags,
+                    test_block=bool(out_test_block.get(e.signal_id, False))
+                    and should_show_test_block("IN", nature),
                 ))
 
             out_chips = []
@@ -80,7 +88,8 @@ class CanvasScene(QGraphicsScene):
                     status=e.status,
                     direction="OUT",
                     tooltip=tooltip,
-                    test_block=bool(getattr(e, "test_block", False)),
+                    test_block=bool(getattr(e, "test_block", False))
+                    and should_show_test_block("OUT", nature),
                     interlocks=[],
                 ))
 

@@ -6,6 +6,7 @@ from PyQt5.QtGui import QBrush, QPen, QFont, QColor, QPainter, QPainterPath
 from PyQt5.QtWidgets import QGraphicsRectItem, QMenu, QGraphicsPathItem, QGraphicsSimpleTextItem
 
 from canvas.items.signal_chip_item import SignalChipItem
+from canvas.items.test_block import should_show_test_block
 
 
 class DeviceItem(QGraphicsRectItem):
@@ -50,6 +51,8 @@ class DeviceItem(QGraphicsRectItem):
         # OUT: B.P.
         self._out_bp_symbols: list[QGraphicsPathItem] = []
         self._out_bp_labels: list[QGraphicsSimpleTextItem] = []
+        self._in_bp_symbols: list[QGraphicsPathItem] = []
+        self._in_bp_labels: list[QGraphicsSimpleTextItem] = []
 
         # IN: interlocks (serie). Cada fila puede tener 0..N símbolos.
         self._in_ilk_symbols: list[list[QGraphicsPathItem]] = []
@@ -100,6 +103,8 @@ class DeviceItem(QGraphicsRectItem):
             it.setParentItem(None)
         for it in self._out_bp_symbols + self._out_bp_labels:
             it.setParentItem(None)
+        for it in self._in_bp_symbols + self._in_bp_labels:
+            it.setParentItem(None)
         for row in self._in_ilk_symbols:
             for it in row:
                 it.setParentItem(None)
@@ -111,6 +116,8 @@ class DeviceItem(QGraphicsRectItem):
         self._out_lines = []
         self._out_bp_symbols = []
         self._out_bp_labels = []
+        self._in_bp_symbols = []
+        self._in_bp_labels = []
         self._in_ilk_symbols = []
         self._in_ilk_labels = []
 
@@ -137,6 +144,21 @@ class DeviceItem(QGraphicsRectItem):
             lbl.setZValue(-9)
             self._out_bp_symbols.append(sym)
             self._out_bp_labels.append(lbl)
+
+    def _ensure_in_bp_items(self, idx: int):
+        while len(self._in_bp_symbols) <= idx:
+            sym = QGraphicsPathItem(self)
+            sym.setPen(QPen(QColor(160, 40, 40), 1.6))
+            sym.setBrush(QBrush(Qt.NoBrush))
+            sym.setZValue(-9)
+            lbl = QGraphicsSimpleTextItem("B.P.", self)
+            f = QFont("Segoe UI", 7)
+            f.setBold(True)
+            lbl.setFont(f)
+            lbl.setBrush(QColor(160, 40, 40))
+            lbl.setZValue(-9)
+            self._in_bp_symbols.append(sym)
+            self._in_bp_labels.append(lbl)
 
     def _ensure_ilk_row(self, idx: int):
         while len(self._in_ilk_symbols) <= idx:
@@ -190,6 +212,24 @@ class DeviceItem(QGraphicsRectItem):
                 path.lineTo(x1, y)
                 line.setPath(path)
                 line.setVisible(True)
+
+                self._ensure_in_bp_items(idx)
+                if bool(getattr(chip, "test_block", False)) and should_show_test_block("IN", chip.nature):
+                    cx = x0 + (x1 - x0) / 2
+                    p = QPainterPath()
+                    p.moveTo(cx - 6, y - 6)
+                    p.lineTo(cx + 6, y + 6)
+                    p.moveTo(cx - 6, y + 6)
+                    p.lineTo(cx + 6, y - 6)
+                    self._in_bp_symbols[idx].setPath(p)
+                    self._in_bp_symbols[idx].setVisible(True)
+
+                    br = self._in_bp_labels[idx].boundingRect()
+                    self._in_bp_labels[idx].setPos(cx - br.width()/2, y - 18)
+                    self._in_bp_labels[idx].setVisible(True)
+                else:
+                    self._in_bp_symbols[idx].setVisible(False)
+                    self._in_bp_labels[idx].setVisible(False)
 
                 # Enclavamientos (IN): símbolo NC en serie + relay_tag(s)
                 self._ensure_ilk_row(idx)
@@ -277,6 +317,9 @@ class DeviceItem(QGraphicsRectItem):
 
                 if idx < len(self._in_lines):
                     self._in_lines[idx].setVisible(False)
+                if idx < len(self._in_bp_symbols):
+                    self._in_bp_symbols[idx].setVisible(False)
+                    self._in_bp_labels[idx].setVisible(False)
                 if idx < len(self._in_ilk_symbols):
                     for it in self._in_ilk_symbols[idx]:
                         it.setVisible(False)
@@ -304,7 +347,7 @@ class DeviceItem(QGraphicsRectItem):
 
                 # Block de pruebas (OUT): símbolo X + texto fijo "B.P."
                 self._ensure_bp_items(idx)
-                if bool(getattr(chip, "test_block", False)):
+                if bool(getattr(chip, "test_block", False)) and should_show_test_block("OUT", chip.nature):
                     cx = x0 + (x1 - x0) / 2
                     p = QPainterPath()
                     p.moveTo(cx - 6, y - 6)
