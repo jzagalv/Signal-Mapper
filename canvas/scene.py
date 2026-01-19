@@ -14,9 +14,35 @@ class CanvasScene(QGraphicsScene):
         self.project = project
         self.bay_id = bay_id
         self.device_items = {}
-        self.setSceneRect(0, 0, 2200, 1400)
+        self._base_scene_rect = QRectF(0, 0, 2200, 1400)
+        self._scene_margin = 200
+        self._updating_scene_rect = False
+        self.setSceneRect(self._base_scene_rect)
         self._clipboard_device_id = None
         self._on_project_mutated = on_project_mutated
+        self.changed.connect(self._on_scene_changed)
+
+    def _on_scene_changed(self, _regions):
+        self._update_scene_rect()
+
+    def _update_scene_rect(self):
+        if self._updating_scene_rect:
+            return
+        self._updating_scene_rect = True
+        try:
+            rect = self.itemsBoundingRect()
+            if rect.isNull():
+                self.setSceneRect(self._base_scene_rect)
+                return
+            rect = rect.adjusted(
+                -self._scene_margin,
+                -self._scene_margin,
+                self._scene_margin,
+                self._scene_margin,
+            )
+            self.setSceneRect(rect)
+        finally:
+            self._updating_scene_rect = False
 
     # ---------------- Build / Layout ----------------
     def build_from_model(self):
@@ -96,6 +122,7 @@ class CanvasScene(QGraphicsScene):
             item.set_signals(in_chips, out_chips)
             self.addItem(item)
             self.device_items[dev.device_id] = item
+        self._update_scene_rect()
 
     def persist_layout_to_model(self):
         from domain.models import CanvasLayout

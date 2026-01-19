@@ -10,15 +10,54 @@ class CanvasView(QGraphicsView):
         super().__init__(scene)
         self.setRenderHint(QPainter.Antialiasing, True)
         self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setViewportUpdateMode(QGraphicsView.BoundingRectViewportUpdate)
         self._last_context_scene_pos = None
+        self._panning = False
+        self._pan_start = None
 
     def wheelEvent(self, event):
         if event.modifiers() & Qt.ControlModifier:
             factor = 1.15 if event.angleDelta().y() > 0 else 1 / 1.15
             self.scale(factor, factor)
+            event.accept()
         else:
+            if event.modifiers() & Qt.ShiftModifier:
+                self.horizontalScrollBar().setValue(
+                    self.horizontalScrollBar().value() - event.angleDelta().y()
+                )
+                event.accept()
+                return
             super().wheelEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MiddleButton:
+            self._panning = True
+            self._pan_start = event.pos()
+            self.viewport().setCursor(Qt.ClosedHandCursor)
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if self._panning and self._pan_start is not None:
+            delta = event.pos() - self._pan_start
+            self._pan_start = event.pos()
+            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - delta.x())
+            self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta.y())
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self._panning and event.button() == Qt.MiddleButton:
+            self._panning = False
+            self._pan_start = None
+            self.viewport().setCursor(Qt.ArrowCursor)
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
