@@ -7,6 +7,8 @@ class EditSignalDialog(QDialog):
         current_name: str,
         current_nature: str,
         *,
+        current_dest_id: str | None = None,
+        dest_choices: list[tuple[str, str | None]] | None = None,
         is_output: bool = False,
         current_test_block: bool = False,
         parent=None,
@@ -24,6 +26,20 @@ class EditSignalDialog(QDialog):
         self.nature_combo.addItem("Análoga", "ANALOG")
         self.nature_combo.setCurrentIndex(0 if current_nature == "DIGITAL" else 1)
         lay.addWidget(self.nature_combo)
+
+        self.dest_combo = None
+        if dest_choices is not None:
+            lay.addWidget(QLabel("Destino:"))
+            self.dest_combo = QComboBox()
+            for label, dev_id in dest_choices:
+                self.dest_combo.addItem(label, dev_id)
+            if current_dest_id is None:
+                self.dest_combo.setCurrentIndex(0)
+            else:
+                idx = self.dest_combo.findData(current_dest_id)
+                if idx >= 0:
+                    self.dest_combo.setCurrentIndex(idx)
+            lay.addWidget(self.dest_combo)
 
         # Block de pruebas (sólo OUT)
         self._is_output = bool(is_output)
@@ -44,4 +60,5 @@ class EditSignalDialog(QDialog):
         name = self.name_edit.text().strip() or "SIN_NOMBRE"
         nature = self.nature_combo.currentData()
         tb = bool(self.chk_test_block.isChecked()) if self.chk_test_block else False
-        return name, nature, tb
+        dest_id = self.dest_combo.currentData() if self.dest_combo else None
+        return name, nature, tb, dest_id

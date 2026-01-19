@@ -58,6 +58,85 @@ def rename_signal_texts(bay, signal_id: str, new_name: str) -> None:
                 e.text = new_name
 
 
+def find_signal_destination_device_id(bay, signal_id: str) -> str | None:
+    for dev in bay.devices.values():
+        for e in dev.inputs:
+            if e.signal_id == signal_id:
+                return dev.device_id
+    return None
+
+
+def _infer_origin_name(bay, signal_id: str, origin_device_id: str | None) -> str | None:
+    if origin_device_id and origin_device_id in bay.devices:
+        return bay.devices[origin_device_id].name
+    for dev in bay.devices.values():
+        for e in dev.outputs:
+            if e.signal_id == signal_id:
+                return dev.name
+    for dev in bay.devices.values():
+        for e in dev.inputs:
+            if e.signal_id == signal_id and " desde " in e.text:
+                _, suffix = e.text.split(" desde ", 1)
+                name = suffix.replace("(pendiente)", "").strip()
+                if name:
+                    return name
+    return None
+
+
+def update_signal_destination(
+    bay,
+    signal_id: str,
+    dest_device_id: str | None,
+    *,
+    origin_device_id: str | None = None,
+) -> None:
+    sig = bay.signals.get(signal_id)
+    sig_name = sig.name if sig else signal_id
+    origin_name = _infer_origin_name(bay, signal_id, origin_device_id)
+
+    if dest_device_id is None:
+        dest_name = "EXTERNO"
+    else:
+        dest = bay.devices.get(dest_device_id)
+        if not dest:
+            return
+        dest_name = dest.name
+
+    # Update outputs (optionally only from one origin device).
+    for dev in bay.devices.values():
+        if origin_device_id and dev.device_id != origin_device_id:
+            continue
+        for e in dev.outputs:
+            if e.signal_id != signal_id:
+                continue
+            if dest_device_id is None:
+                e.status = "PENDING"
+                e.text = f"{sig_name} hacia {dest_name} (pendiente)"
+            else:
+                e.status = "CONFIRMED"
+                e.text = f"{sig_name} hacia {dest_name}"
+
+    # Update inputs (single destination per bay).
+    for dev in bay.devices.values():
+        if dest_device_id is None or dev.device_id != dest_device_id:
+            dev.inputs[:] = [e for e in dev.inputs if e.signal_id != signal_id]
+            continue
+
+        end = next((e for e in dev.inputs if e.signal_id == signal_id), None)
+        text = f"{sig_name} desde {origin_name}" if origin_name else sig_name
+        if end:
+            end.status = "CONFIRMED"
+            end.text = text
+        else:
+            dev.inputs.append(
+                SignalEnd(
+                    signal_id=signal_id,
+                    direction="IN",
+                    text=text,
+                    status="CONFIRMED",
+                )
+            )
+
 def recognize_pending_link_cross(project, origin_bay_id: str, origin_device_id: str, signal_id: str, dest_bay_id: str, dest_device_id: str) -> None:
     origin_bay = project.bays[origin_bay_id]
     dest_bay = project.bays[dest_bay_id]

@@ -8,7 +8,13 @@ from PyQt5.QtWidgets import (
 
 from ui.dialogs.recognize_signal_dialog import RecognizeSignalDialog
 from ui.dialogs.edit_signal_dialog import EditSignalDialog
-from domain.services.link_service import recognize_pending_link_cross, remove_link_project, rename_signal_texts
+from domain.services.link_service import (
+    find_signal_destination_device_id,
+    recognize_pending_link_cross,
+    remove_link_project,
+    rename_signal_texts,
+    update_signal_destination,
+)
 
 
 class PendingSignalsDock(QDockWidget):
@@ -241,10 +247,21 @@ class PendingSignalsDock(QDockWidget):
             QMessageBox.warning(self, "Editar", "No se encontró la definición de la señal en esta bahía.")
             return
 
-        dlg = EditSignalDialog(current_name=sig.name, current_nature=sig.nature, parent=self)
+        current_dest_id = find_signal_destination_device_id(bay, signal_id)
+        dest_choices = [("EXTERNO / Pendiente", None)]
+        for dev in bay.devices.values():
+            dest_choices.append((dev.name, dev.device_id))
+
+        dlg = EditSignalDialog(
+            current_name=sig.name,
+            current_nature=sig.nature,
+            current_dest_id=current_dest_id,
+            dest_choices=dest_choices,
+            parent=self,
+        )
         if dlg.exec_() != dlg.Accepted:
             return
-        new_name, new_nature = dlg.get_data()
+        new_name, new_nature, _new_tb, new_dest_id = dlg.get_data()
 
         affected = set()
         for b in self._project.bays.values():
@@ -252,6 +269,10 @@ class PendingSignalsDock(QDockWidget):
                 affected.add(b.bay_id)
                 rename_signal_texts(b, signal_id, new_name)
                 b.signals[signal_id].nature = new_nature
+
+        if new_dest_id != current_dest_id:
+            update_signal_destination(bay, signal_id, new_dest_id)
+            affected.add(bay.bay_id)
 
         self.refresh()
         self.projectMutated.emit(affected)

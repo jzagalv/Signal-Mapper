@@ -76,6 +76,34 @@
       "nature": "DIGITAL",
       "category": "Mediciones",
       "description": ""
+    },
+    {
+      "code": "STATE_OPEN",
+      "label": "Estado Abierto",
+      "nature": "DIGITAL",
+      "category": "Estados",
+      "description": ""
+    },
+    {
+      "code": "STATE_CLOSE",
+      "label": "Estado Cerrado",
+      "nature": "DIGITAL",
+      "category": "Estados",
+      "description": ""
+    },
+    {
+      "code": "SGNL_OP",
+      "label": "Estado Operado",
+      "nature": "DIGITAL",
+      "category": "Estados",
+      "description": ""
+    },
+    {
+      "code": "RST",
+      "label": "Reset Remoto",
+      "nature": "DIGITAL",
+      "category": "Mandos",
+      "description": ""
     }
   ]
 }

@@ -194,7 +194,11 @@ class CanvasScene(QGraphicsScene):
 
     def edit_signal_from_chip(self, chip: SignalChipItem):
         from ui.dialogs.edit_signal_dialog import EditSignalDialog
-        from domain.services.link_service import rename_signal_texts
+        from domain.services.link_service import (
+            find_signal_destination_device_id,
+            rename_signal_texts,
+            update_signal_destination,
+        )
         bay = self.project.bays[self.bay_id]
         sig = bay.signals.get(chip.signal_id)
         if not sig:
@@ -210,15 +214,22 @@ class CanvasScene(QGraphicsScene):
                 end = next((e for e in dev.outputs if e.signal_id == chip.signal_id), None)
                 tb_current = bool(getattr(end, "test_block", False)) if end else False
 
+        current_dest_id = find_signal_destination_device_id(bay, chip.signal_id)
+        dest_choices = [("EXTERNO / Pendiente", None)]
+        for dev in bay.devices.values():
+            dest_choices.append((dev.name, dev.device_id))
+
         dlg = EditSignalDialog(
             current_name=sig.name,
             current_nature=sig.nature,
+            current_dest_id=current_dest_id,
+            dest_choices=dest_choices,
             is_output=(chip.direction == "OUT"),
             current_test_block=tb_current,
         )
         if dlg.exec_() != dlg.Accepted:
             return
-        new_name, new_nature, new_tb = dlg.get_data()
+        new_name, new_nature, new_tb, new_dest_id = dlg.get_data()
         rename_signal_texts(bay, chip.signal_id, new_name)  # actualiza IN y OUT
         bay.signals[chip.signal_id].nature = new_nature
 
@@ -230,7 +241,17 @@ class CanvasScene(QGraphicsScene):
                 if end:
                     end.test_block = bool(new_tb)
 
+        if new_dest_id != current_dest_id:
+            update_signal_destination(
+                bay,
+                chip.signal_id,
+                new_dest_id,
+                origin_device_id=chip.owner_device_id if chip.direction == "OUT" else None,
+            )
+
         self.build_from_model()
+        if callable(self._on_project_mutated):
+            self._on_project_mutated({self.bay_id})
         QMessageBox.information(None, "OK", "Señal actualizada en ambos extremos.")
 
     def edit_decorations_from_chip(self, chip: SignalChipItem):
